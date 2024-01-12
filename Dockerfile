@@ -1,62 +1,31 @@
-# syntax = docker/dockerfile:1
+FROM ruby:3.2.2
 
-# Make sure RUBY_VERSION matches the Ruby version in .ruby-version and Gemfile
-ARG RUBY_VERSION=3.2.2
-FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim as base
+# add nodejs and yarn dependencies for the frontend
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
+echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
 
-# Rails app lives here
-WORKDIR /rails
+# Instala nossas dependencias
+RUN apt-get update && apt-get install -qq -y --no-install-recommends \
+nodejs yarn build-essential libpq-dev imagemagick git-all nano
 
-# Set production environment
-ENV RAILS_ENV="production" \
-    BUNDLE_DEPLOYMENT="1" \
-    BUNDLE_PATH="/usr/local/bundle" \
-    BUNDLE_WITHOUT="development"
+# Instalar bundler
+RUN gem install bundler
 
+# Seta nosso path
+ENV INSTALL_PATH /municipes
 
-# Throw-away build stage to reduce size of final image
-FROM base as build
+# Cria nosso diretório
+RUN mkdir -p $INSTALL_PATH
 
-# Install packages needed to build gems
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libvips pkg-config
+# Seta o nosso path como o diretório principal
+WORKDIR $INSTALL_PATH
 
-# Install application gems
-COPY Gemfile Gemfile.lock ./
-RUN bundle install && \
-    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
-    bundle exec bootsnap precompile --gemfile
+# Copia o nosso Gemfile para dentro do container
+COPY Gemfile ./
 
-# Copy application code
+# Seta o path para as Gems
+ENV BUNDLE_PATH /gems
+
+# Copia nosso código para dentro do container
 COPY . .
-
-# Precompile bootsnap code for faster boot times
-RUN bundle exec bootsnap precompile app/ lib/
-
-# Precompiling assets for production without requiring secret RAILS_MASTER_KEY
-RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
-
-
-# Final stage for app image
-FROM base
-
-# Install packages needed for deployment
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl libsqlite3-0 libvips && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
-
-# Copy built artifacts: gems, application
-COPY --from=build /usr/local/bundle /usr/local/bundle
-COPY --from=build /rails /rails
-
-# Run and own only the runtime files as a non-root user for security
-RUN useradd rails --create-home --shell /bin/bash && \
-    chown -R rails:rails db log storage tmp
-USER rails:rails
-
-# Entrypoint prepares the database.
-ENTRYPOINT ["/rails/bin/docker-entrypoint"]
-
-# Start the server by default, this can be overwritten at runtime
-EXPOSE 3000
-CMD ["./bin/rails", "server"]
