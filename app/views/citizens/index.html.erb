@@ -1,0 +1,37 @@
+<p style="color: green"><%= notice %></p>
+
+<h1 class="h3 mb-4 text-gray-800">Municipes</h1>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card shadow mb-4">
+      <div class="card-body">
+        <table class="table table-striped">
+          <thead>
+          <th>Usuário</th>
+          <th>Status</th>
+          <th>Email</th>
+          <th>Total</th>
+          <th>Endereço</th>
+          <th>Cidade</th>
+          <th>Estado</th>
+          </thead>
+          <tbody>
+          <% @citizen.each do |order| %>
+            <tr>
+              <td><%= order.fname %></td>
+              <td><%= order.email %></td>
+              <td><%= order.payment_method %></td>
+              <td><%= order.street %></td>
+              <td><%= order.city %></td>
+              <td><%= order.state %></td>
+              <td>
+              </td>
+            </tr>
+          <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

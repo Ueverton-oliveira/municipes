@@ -30,7 +30,6 @@ gem "jbuilder"
 gem "redis", ">= 4.0.1"
 gem "sidekiq"
 
-
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"
 
@@ -42,7 +41,10 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
+gem "haml"
 gem "interactor", "~> 3.0"
+gem "rubocop"
+
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
