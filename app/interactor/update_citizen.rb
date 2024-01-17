@@ -1,12 +1,12 @@
-class SendMessage
+class UpdateCitizen
   include Interactor
 
   def call
     context.citizen = Citizen.new(context.params)
 
-    if context.citizen.save
+    if context.citizen.update
       Citizen.where(active: true).each do |citizen|
-        SendMailJob.perform_async(citizen.id, citizen.email)
+        UpdateCitizenJob.perform_async(citizen.id)
       end
     else
       context.fail! unless context.citizen.valid?
