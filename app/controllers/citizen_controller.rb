@@ -40,6 +40,7 @@ class CitizenController < ApplicationController
 
     if result.success?
       redirect_to result.citizen, notice: t('controllers.citizen.update')
+      redirect_to result.citizen, notice: t('controllers.citizens.update')
     else
       @article = result.citizen
       render :edit
