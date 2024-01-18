@@ -23,14 +23,14 @@ RSpec.describe "Citizens", type: :request do
   end
 
   describe 'GET #index' do
-    it 'assigns all citizens as @citizens' do
+    it 'assigns all citizen as @citizen' do
       get :index
       expect(assigns(:citizens)).to eq([citizen])
     end
   end
 
   describe 'GET #index with search' do
-    it 'returns the citizens searched correctly' do
+    it 'returns the citizen searched correctly' do
       citizen1 = create(:citizen, name: 'Cidadão 1')
       citizen2 = create(:citizen, name: 'Cidadão 2')
 

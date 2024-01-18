@@ -7,6 +7,5 @@ FactoryBot.define do
     state { "MyString" }
     cep { "MyString" }
     ibge_code { "MyString" }
-    citizen { nil }
   end
 end
