@@ -1,0 +1,17 @@
+<h1 class="h3 mb-4 text-gray-800">Detalhes do Municipes</h1>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card shadow mb-4">
+      <div class="card-body">
+        <%= render @citizen %>
+      </div>
+
+      <div>
+        <%= link_to "Editar", edit_citizen_path(@citizen) %> |
+        <%= link_to "Voltar", citizens_path %>
+
+      </div>
+    </div>
+  </div>
+</div>

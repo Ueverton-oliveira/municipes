@@ -3,9 +3,14 @@ class CitizenController < ApplicationController
                 only: %i[show edit update]
 
   def index
-    @q = Citizen.ransack(params[:q])
-    @citizens = @q.result(distinct: true)
-    @citizens = @citizens.order('created_at').page(params[:page]).per(4)
+    if params[:name].present?
+      @citizen = Citizen.search_by_name(params[:name])
+      if @citizen.empty?
+        flash.now[:notice] = "Nenhum munícipe com esse nome encontrado."
+      end
+    else
+      @citizen = Citizen.all
+    end
   end
 
   def show; end
@@ -23,7 +28,7 @@ class CitizenController < ApplicationController
     result = CreateCitizen.call(params: citizen_params)
 
     if result.success?
-      redirect_to result.citizen, notice: t('controllers.citizens.create.success')
+      redirect_to result.citizen, notice: t('controllers.citizen.create.success')
     else
       @article = result.citizen
       render :new
@@ -34,7 +39,7 @@ class CitizenController < ApplicationController
     result = UpdateCitizen.call(params: citizen_params)
 
     if result.success?
-      redirect_to result.citizen, notice: t('controllers.citizens.update')
+      redirect_to result.citizen, notice: t('controllers.citizen.update')
     else
       @article = result.citizen
       render :edit

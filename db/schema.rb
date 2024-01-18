@@ -56,7 +56,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_17_124923) do
     t.index ["citizen_id"], name: "index_adresses_on_citizen_id"
   end
 
-  create_table "citizens", force: :cascade do |t|
+  create_table "citizen", force: :cascade do |t|
     t.string "name"
     t.string "cpf"
     t.string "cns"
@@ -70,5 +70,5 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_17_124923) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "adresses", "citizens"
+  add_foreign_key "adresses", "citizen"
 end

@@ -30,6 +30,11 @@ gem "jbuilder"
 gem "redis", ">= 4.0.1"
 gem "sidekiq"
 
+# PhoneLib
+gem 'phonelib', '0.6.51'
+# CPF/CNPJ
+gem 'cpf_cnpj', '0.5.0'
+
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"
 
@@ -41,9 +46,8 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
-gem "haml"
 gem "interactor", "~> 3.0"
-gem "rubocop"
+gem 'simplecov', require: false, group: :test
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
@@ -61,6 +65,7 @@ group :development do
   gem "web-console"
   gem "pry-rails"
   gem "awesome_print"
+  gem 'rubocop', '~> 1.60', require: false
 
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
   # gem "rack-mini-profiler"
